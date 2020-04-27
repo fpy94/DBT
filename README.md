@@ -2,7 +2,7 @@
 Differential boundary tree implemented in pytorch.
 
 # Requiements:
-pytorch
-numpy
-ete3
-scipy
+pytorch<br>
+numpy<br>
+ete3<br>
+scipy<br>
