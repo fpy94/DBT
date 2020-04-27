@@ -1,5 +1,6 @@
 import ete3
 from ete3 import Tree
+import numpy as np
 def BTQuery(q,tree,dist,k=10):
     currentname=tree.get_tree_root().name
     while True:

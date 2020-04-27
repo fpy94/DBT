@@ -73,7 +73,7 @@ class CNNpan_DBT(CNNpan):
                 total_prob=score
                 return total_prob.squeeze(1)
     def train_loop_tree(self,tree,query_s,query_m,query_label,optimizer,update_step=1):
-		#cal loss in query one by one
+        #cal loss in query one by one
         batchsize=query_s.size(0)
         Loss=[]
         Pred=[]

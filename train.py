@@ -48,7 +48,7 @@ def train(lr,bs,eps,FOREST_NUM,MAX_EPOCHS):
 	net=CNNpan_DBT()
 	net.cuda()
 
-	# pretrain the model useing regular DNN
+	# pretrain the model using regular DNN
 	train_loader=DataLoader(allele_dataset(train_data),batch_size=64,shuffle=True)
 	optimizer=torch.optim.Adam(net.parameters(),lr=1e-3)
 	for epochs in range(3):
@@ -76,7 +76,7 @@ def train(lr,bs,eps,FOREST_NUM,MAX_EPOCHS):
 			dist=distance(trainfeature,trainfeature)
 	#         print('building tree')
 			for _ in range(FOREST_NUM):
-			#rebuild tree and train times
+			#rebuild tree and train
 				tree=BTtrain(dist,y_s.data.numpy(),eps)    
 				loss,pred=net.train_loop_tree(tree,sx_q,mx_q,y_q,optimizer)
 				pr,_=stats.pearsonr(pred,y_q.data.numpy()[:,0])
