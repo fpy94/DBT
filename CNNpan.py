@@ -8,7 +8,6 @@ from scipy import stats
 class CNNpan(nn.Module):
     def __init__(self):
         super(CNNpan,self).__init__()
-        self.lambda_=lambda_
 
         self.pconv1=nn.Sequential(
             nn.Conv1d(21,128,3,padding=1),
@@ -54,7 +53,7 @@ class CNNpan(nn.Module):
         return self.feature
 
     def forward(self,sx,mx):
-		self.feature=self.extract_feature(sx,mx)
+        self.feature=self.extract_feature(sx,mx)
         self.represent=self.MLP3(self.feature)
         out=self.sigmoid(self.represent)
         return out
