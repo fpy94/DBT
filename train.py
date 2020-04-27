@@ -20,6 +20,7 @@ import argparse
 
 def train(lr,bs,eps,FOREST_NUM,MAX_EPOCHS):
     # loading data and build train_loader
+    '''
     datafile='../../data/iedb2013/data_pan_nonoverlap.pkl'
     with open(datafile,'rb') as f:
         data=pickle.load(f)['data']
@@ -41,9 +42,13 @@ def train(lr,bs,eps,FOREST_NUM,MAX_EPOCHS):
     train_index,test_index=zip(*kf.split(total_data))
     train_data=[total_data[i] for i in train_index[0]]
     test_data=[total_data[i] for i in test_index[0]]
+    '''
+    with open('./data.pkl','rb') as f:
+        train_data=pickle.load(f)['data']
+
 
     train_loader=DataLoader(allele_dataset(train_data),batch_size=bs,shuffle=True)
-    test_loader=DataLoader(allele_dataset(test_data),batch_size=bs,shuffle=False)
+    #test_loader=DataLoader(allele_dataset(test_data),batch_size=bs,shuffle=False)
 
     net=CNNpan_DBT()
     net.cuda()
