@@ -68,13 +68,13 @@ def train(lr,bs,eps,cv,modeldir,savedir,FOREST_NUM,MAX_EPOCHS,savecheck=10):
             Loss.append(loss)
             Pred.append(pred)
             if (batch_idx+1)%20==0:
-                print('Batch {}, loss {}, pr {}'.format(batch_idx,loss,pr))
+                print('Batch {}, loss {}, pr {}'.format((batch_idx+1),loss,pr))
         scheduler.step()
         Loss=np.mean(Loss)
         Pred=np.concatenate(Pred,0)
         Label=np.concatenate(Label,0)
         pr,_=stats.pearsonr(Pred,Label[:,0])
-        print('Epoch {}, loss {}, pr {}'.format(epochs,Loss,pr))
+        print('Epoch {}, loss {}, pr {}'.format((epochs+1),Loss,pr))
 
         if (epochs+1)%savecheck==0:
             torch.save({'epochs':epochs,

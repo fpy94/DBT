@@ -62,7 +62,7 @@ class CNNpan_DBT(CNNpan):
                 return total_prob.squeeze(1)                
             else:
                 # to the final node
-                sibling=path+[tree.search_nodes(name=children[minnode])[0].up.name]
+                sibling=path.copy()
                 sibling+=[n.name for n in tree.search_nodes(name=children[minnode])[0].up.get_children()]
                 distance=self.compute_dist(sibling,q_s,q_m)
                 weight=F.softmax(-1*distance,0)
