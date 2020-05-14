@@ -9,8 +9,9 @@ from torch.utils.data import Dataset, DataLoader,TensorDataset
 from dataset import *
 from CNNpan import CNNpan
 from CNNpan_DBT import CNNpan_DBT
-def BTQuery(q,tree,trainfeature,k=10):
+def BTQuery(q,tree,trainfeature,k=128):
     currentname=tree.get_tree_root().name
+    path=[currentname]
     while True:
         children=tree.search_nodes(name=currentname)[0].get_children()
         if len(children)<k:
@@ -26,24 +27,33 @@ def BTQuery(q,tree,trainfeature,k=10):
         if minnode==currentname:
             break
         currentname=minnode
-    return currentname
+        path.append(minnode)
+    return currentname,path
 def BTtrain(trainfeature,label,eps=0.1):
+    meann=np.mean(trainfeature,0,keepdims=True)
+    middle=np.argsort(np.sum((trainfeature-meann)**2,1))[0]
     Nnodes=trainfeature.shape[0]
-    Nodelist=np.random.permutation(Nnodes)
+    Nodelist_=np.random.permutation(Nnodes)
+    Nodelist=[middle]
+    for n in Nodelist_:
+        if n not in Nodelist:
+            Nodelist.append(n)
     tree=Tree(name=Nodelist[0])
     querynum=1
     nodenum=1
+    Path=[[] for _ in range(Nnodes)]
     for nodeidx in Nodelist[1:]:
-        vmin=BTQuery(nodeidx,tree,trainfeature)
+        vmin,p=BTQuery(nodeidx,tree,trainfeature)
         if np.abs(label[vmin]-label[nodeidx])>eps:
 #             tree.search_nodes(name=vmin)[0].add_child(name=nodeidx,dist=np.abs(label[vmin]-label[nodeidx]))
             tree.search_nodes(name=vmin)[0].add_child(name=nodeidx)
             nodenum+=1
+            Path[nodeidx]=p
         querynum+=1
         if querynum%2500==0:
             print('querynum {}, treenum {}'.format(querynum,nodenum))
     print('tree building finished, treenum {}'.format(nodenum))
-    return tree,Nodelist
+    return tree,Nodelist,Path
 
 def build_tree(cv,bs,modeldir,savedir):
     with open('cvdata.pkl','rb') as f:
@@ -64,9 +74,9 @@ def build_tree(cv,bs,modeldir,savedir):
     trainfeature=np.concatenate(trainfeature,0)
     trainlabel=np.concatenate(trainlabel,0)
     print(trainfeature.shape,trainlabel.shape)
-    tree,nodelist=BTtrain(trainfeature,trainlabel,0.1)
-    with open(os.path.join(savedir,'tree_cv_'+str(cv)+'_epoch_'+str(epoch)+'.pkl'), 'wb') as f:
-        pickle.dump({'tree':tree,'nodelist':nodelist},f)
+    tree,nodelist,path=BTtrain(trainfeature,trainlabel,0.1)
+    with open(os.path.join(savedir,'tree_cv_'+str(cv)+'_epoch_'+str(epoch+1)+'.pkl'), 'wb') as f:
+        pickle.dump({'tree':tree,'nodelist':nodelist,'path':path},f)
     
 if __name__=='__main__':
     parser=argparse.ArgumentParser()

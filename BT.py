@@ -1,7 +1,7 @@
 import ete3
 from ete3 import Tree
 import numpy as np
-def BTQuery(q,tree,dist,k=10):
+def BTQuery(q,tree,dist,k=128):
     currentname=tree.get_tree_root().name
     while True:
         children=tree.search_nodes(name=currentname)[0].get_children()

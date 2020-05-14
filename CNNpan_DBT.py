@@ -38,7 +38,7 @@ class CNNpan_DBT(CNNpan):
     def query(self,q_s,q_m,tree):
         rootname=int(tree.get_tree_root().name)
         currentname=int(tree.get_tree_root().name)
-        path=[]
+        path=[rootname]
         while True:
             #get children
             children=[currentname]
@@ -62,8 +62,12 @@ class CNNpan_DBT(CNNpan):
                 return total_prob.squeeze(1)                
             else:
                 # to the final node
-                sibling=path.copy()
-                sibling+=[n.name for n in tree.search_nodes(name=children[minnode])[0].up.get_children()]
+                sibling_=path.copy()
+                sibling_+=[n.name for n in tree.search_nodes(name=children[minnode])[0].up.get_children()]
+                sibling=[]
+                for s in sibling_:
+                    if s not in sibling:
+                        sibling.append(s)
                 distance=self.compute_dist(sibling,q_s,q_m)
                 weight=F.softmax(-1*distance,0)
                 indices=torch.LongTensor(sibling)

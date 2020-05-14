@@ -8,7 +8,7 @@ numpy >1.17.2<br>
 ete3 >3.1.1<br>
 scipy >1.3.1<br>
 
-# usage and hyper-parameters:
+# Usage and hyper-parameters:
 ## Train DBT
 python3 train.py -lr 0.001 -bs 1000 -nfor 1 -eps 0.1<br>
 -lr learning rate <br>

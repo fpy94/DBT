@@ -33,7 +33,7 @@ def train(lr,bs,eps,cv,modeldir,savedir,FOREST_NUM,MAX_EPOCHS,savecheck=10):
         checkpoint=torch.load(modeldir)
         net.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-        nowep=checkpoint['epochs']
+        nowep=checkpoint['epochs']+1
         print('Continue training from epoch {}, learning rate {}'.format(nowep,optimizer.state_dict()['param_groups'][0]['lr']))
     else:
         # loading pretrain model
@@ -67,7 +67,7 @@ def train(lr,bs,eps,cv,modeldir,savedir,FOREST_NUM,MAX_EPOCHS,savecheck=10):
             Label.append(y_q.data.numpy())
             Loss.append(loss)
             Pred.append(pred)
-            if (batch_idx+1)%20==0:
+            if (batch_idx+1)%5==0:
                 print('Batch {}, loss {}, pr {}'.format((batch_idx+1),loss,pr))
         scheduler.step()
         Loss=np.mean(Loss)
@@ -80,7 +80,7 @@ def train(lr,bs,eps,cv,modeldir,savedir,FOREST_NUM,MAX_EPOCHS,savecheck=10):
             torch.save({'epochs':epochs,
                         'model_state_dict':net.state_dict(),
                         'optimizer_state_dict':optimizer.state_dict()},
-                        os.path.join(savedir,'checkpoint_cv_'+str(cv)+'_epoch_'+str(epochs)+'.pkl')
+                        os.path.join(savedir,'checkpoint_cv_'+str(cv)+'_epoch_'+str(epochs+1)+'_bs_'+str(bs)+'_lr_'+str(lr)+'.pkl')
                       )
 
 
