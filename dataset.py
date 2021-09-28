@@ -12,11 +12,7 @@ class allele_dataset:
 	def __init__(self,data):
 		seq,soh,mhcoh,score,allele=zip(*data)
 		self.sx=np.concatenate([np.expand_dims(i,0) for i in soh],0)
-		self.sx=self.sx.astype(np.float32)
-		self.sx/=10
 		self.mx=np.concatenate([np.expand_dims(i,0) for i in mhcoh],0)
-		self.mx=self.mx.astype(np.float32)
-		self.mx/=10
 
 		self.y=np.expand_dims(np.array(score),1)
 		self.y=self.y.astype(np.float32)
