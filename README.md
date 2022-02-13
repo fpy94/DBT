@@ -31,4 +31,8 @@ python build_tree.py -cv 0 -datadir ./data_process/cvdata.pkl -rep 0 -eps 0.05 -
 ## Query the boundary tree
 python query_tree.py -cv 0 -eps 0.05 -rep 0 -mpath MODEL_PATH -datadir ./data_process/cvdata.pkl -tpath TREE_PATH -savedir SAVE_PATH <br>
 -rep the tree index<br>
-
+## Test in independent set
+We have provided a well-trained model for testing in the independent testset.<br>
+To test the independent testset, you need to first preprocess the test data as in test_data_process do then run:<br>
+sh query_tree_alldata.sh<br>
+This script will predict the test data for each boundary tree, the final prediction is the average of the prediction on each tree.
